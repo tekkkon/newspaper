@@ -821,12 +821,22 @@ class ContentExtractor(object):
                 parent_nodes.append(parent_node)
 
             # Parent of parent node
-            parent_parent_node = self.parser.getParent(parent_node)
-            if parent_parent_node is not None:
-                self.update_node_count(parent_parent_node, 1)
-                self.update_score(parent_parent_node, upscore / 2)
-                if parent_parent_node not in parent_nodes:
-                    parent_nodes.append(parent_parent_node)
+            # parent_parent_node = self.parser.getParent(parent_node)
+            # if parent_parent_node is not None:
+            #     self.update_node_count(parent_parent_node, 1)
+            #     self.update_score(parent_parent_node, upscore / 2)
+            #     if parent_parent_node not in parent_nodes:
+            #         parent_nodes.append(parent_parent_node)
+
+            # parent up through the tree
+            ancestor_node = self.parser.getParent(parent_node)
+            j = 1.0
+            while ancestor_node is not None:
+                self.update_score(ancestor_node, upscore / (float(j)))
+                if ancestor_node not in parent_nodes:
+                    parent_nodes.append(ancestor_node)
+                ancestor_node = self.parser.getParent(ancestor_node)
+                j += 1
             cnt += 1
             i += 1
 
